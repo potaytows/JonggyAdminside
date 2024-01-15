@@ -76,7 +76,7 @@ const AddRestaurant = ({ navigation, route }) => {
             </View>
             <View style={styles.addButtonCont}>
             <TouchableOpacity style={styles.addButton} onPress={()=>fetchAddRestaurant()}>
-                <Text style={{color:"white"}}>ยินยัน</Text>
+                <Text style={{color:"white"}}>ยืนยัน</Text>
 
             </TouchableOpacity>
             </View>

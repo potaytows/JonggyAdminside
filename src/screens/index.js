@@ -1,7 +1,7 @@
 import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
-
+import * as SecureStore from 'expo-secure-store';
 import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -11,7 +11,21 @@ const apiheader = "http://192.168.1.101:8000";
 const Index = ({ navigation }) => {
     const { container, header, headerTitle, } = styles
 
+    const getLoginInformation = async () => {
+
+        try {
+          user = await SecureStore.getItemAsync('userAuth');
+          console.log(user)
+          
+    
+        } catch (e) {
+          console.log(e)
+        };
+      };
+    
+
     useEffect(() => {
+        getLoginInformation()
 
 
     }, []);
