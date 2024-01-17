@@ -28,7 +28,7 @@ const Login = ({ navigation }) => {
                 headers:{'Content-Type':'application/json'},
                 body: JSON.stringify({username:username,password:password})
             };
-            const response = await fetch(apiheader + '/users/Auth',fetchOptions);
+            const response = await fetch(apiheader + '/users/Auth/admin',fetchOptions);
             const result = await response.json();
             console.log(result.status);
             if(result.status == "auth failed"){
