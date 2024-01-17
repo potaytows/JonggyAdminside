@@ -9,10 +9,10 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
-const Index = ({ navigation }) => {
+const AllUsers = ({ navigation }) => {
     const { linearGradient, restaurantTitle, flatlist, container, loadingindi, restaurantData } = styles
     const [isLoading, setLoading] = useState(true);
-    const [RestaurantList, setData] = useState([]);
+    const [usersList, setData] = useState([]);
     const [imagePlace, setImage] = useState("");
     const isFocused = useIsFocused();
 
@@ -33,12 +33,12 @@ const Index = ({ navigation }) => {
     const List = ({ item }) => (
 
 
-        <TouchableOpacity onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id,newOwner:""})}>
+        <TouchableOpacity onPress={() => navigation.navigate("User", { username: item.username})}>
             <View style={flatlist}>
                 <View stlye={restaurantData}>
                     <Text style={restaurantTitle} adjustsFontSizeToFit={true}
                         numberOfLines={2}>
-                        {item.restaurantName}
+                        {item.username}
                     </Text>
                 </View>
 
@@ -49,16 +49,11 @@ const Index = ({ navigation }) => {
 
     );
 
-    const Ifloading = () => {
-        if (isLoading) {
-            return null;
-        }
-        return null;
-    }
+
     const getRestaurants = async () => {
         setLoading(true);
         try {
-            const response = await fetch(apiheader + '/restaurants');
+            const response = await fetch(apiheader + '/users/getUsers');
             const result = await response.json();
             setData(result)
         } catch (error) {
@@ -92,14 +87,10 @@ const Index = ({ navigation }) => {
                 <ActivityIndicator size={"large"} animating={isLoading} style={loadingindi} />
             </View>
             <View style={styles.topper}>
-            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("addRestaurant")}>
-                <Text style={{color:"white"}}>เพิ่มร้านอาหาร</Text>
-
-            </TouchableOpacity>
 
             </View>
             <FlatList
-                data={RestaurantList}
+                data={usersList}
                 renderItem={({ item }) => <List item={item} />}
                 keyExtractor={item => item._id}
             />
@@ -166,4 +157,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Index
+export default AllUsers

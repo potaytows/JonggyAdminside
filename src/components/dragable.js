@@ -11,7 +11,7 @@ import Animated, {
 import { StyleSheet, } from 'react-native';
 
 import Table from './table';
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const updateTable = async (xTrans,yTrans,id) => {
     try {

@@ -3,7 +3,7 @@ import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, A
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const AddRestaurant = ({ navigation, route }) => {
     const [isLoading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         marginHorizontal:20,
         marginTop:10    
       },addButton:{
-        backgroundColor:"#209bcf",
+        backgroundColor:'#ff8a24',
         width:120,
         height:30,
         justifyContent: 'center',

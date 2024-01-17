@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid,TouchableOpacity, Image } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
@@ -6,13 +6,15 @@ import Dragable from '../../components/dragable';
 import React, { useEffect, useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const Login = ({ navigation }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-
+    const showLoginfailToast =()=>{
+        ToastAndroid.showWithGravityAndOffset('you are not authorized.',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
+    }
     useEffect(() => {
 
 
@@ -30,6 +32,7 @@ const Login = ({ navigation }) => {
             const result = await response.json();
             console.log(result.status);
             if(result.status == "auth failed"){
+                showLoginfailToast();
                 console.log("auth did fail")
             }if(result.status == "auth success"){
                 await SecureStore.setItemAsync('userAuth',JSON.stringify(result.obj));
@@ -67,7 +70,6 @@ const Login = ({ navigation }) => {
                     onChangeText={text => setPassword(text)}
                     secureTextEntry
                 />
-
                 <TouchableOpacity style={styles.button} onPress={AuthCecker} >
                     <Text style={styles.buttonText}>เข้าสู่ระบบ</Text>
                 </TouchableOpacity>

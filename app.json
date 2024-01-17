@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dragdrop_app",
-    "slug": "dragdrop_app",
+    "name": "JongyAdminSide",
+    "slug": "JongyAdminSide",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

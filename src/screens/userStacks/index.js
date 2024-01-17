@@ -2,7 +2,7 @@ import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, A
 import React, { useEffect, useState } from 'react';
 
 import * as SecureStore from 'expo-secure-store';
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const Index = ({ navigation }) => {
     const { container, header, headerTitle, } = styles

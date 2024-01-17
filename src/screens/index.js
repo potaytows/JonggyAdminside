@@ -6,7 +6,6 @@ import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const apiheader = "http://192.168.1.101:8000";
 
 const Index = ({ navigation }) => {
     const { container, header, headerTitle, } = styles
@@ -54,7 +53,7 @@ const Index = ({ navigation }) => {
                     </View>
                     
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("UserManagement")}>
+                <TouchableOpacity onPress={() => navigation.navigate("allUsers")}>
                     <View style={{ height: 150 }}>
                         <View style={styles.item}>
 

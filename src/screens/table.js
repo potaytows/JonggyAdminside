@@ -8,7 +8,7 @@ import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const Table = ({ route }) => {
     const [obj, setData] = useState([]);

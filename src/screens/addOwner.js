@@ -6,15 +6,14 @@ import React, { useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
 
-const apiheader = "http://192.168.1.101:8000";
+const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
-const AddOwner = ({ navigation }) => {
+const AddOwner = ({ navigation,route }) => {
     const [userList, setUsers] = useState([]);
 
 
-    
+
     const getUsers = async () => {
-        console.log(process.env.apiURI)
         try {
             const response = await fetch(apiheader + '/users/getUsers');
             const result = await response.json();
@@ -26,30 +25,49 @@ const AddOwner = ({ navigation }) => {
     const List = ({ item }) => (
 
 
-        
-            <View style={styles.flatlist}>
-                <View stlye={styles.usertData}>
-                    <Text style={styles.userTitle}>
-                        {item.username}
-                    </Text>
-                    <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("Tabs", { username: item.username})}>
-                        <Text style={{color:'white'}}>เพิ่ม</Text>
-                    </TouchableOpacity>
-                </View>
 
+        <View style={styles.flatlist}>
+
+            <View style={styles.left}>
+                <Text style={styles.userTitle}>
+                    {item.username}
+                </Text>
 
             </View>
-        
+
+            <View style={styles.right}>
+                <TouchableOpacity style={styles.addButton} onPress={() => {
+
+                    navigation.navigate('Tabs', {
+                        screen: 'หน้าหลัก',
+                        params: {
+                            screen: 'Restaurant',
+                            params: { newOwner: item.username,restaurant_id:route.params.restaurant_id },
+                            merge: true
+                            
+                        },
+
+                    });
+                }}>
+                    <Text style={{ color: 'white' }}>เพิ่ม {item.username}</Text>
+                </TouchableOpacity>
+
+            </View>
+            
+
+
+        </View>
+
 
 
     );
     useFocusEffect(
         React.useCallback(() => {
-          getUsers();
+            getUsers();
         }, [])
-      );
+    );
 
-    
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -57,6 +75,7 @@ const AddOwner = ({ navigation }) => {
                 renderItem={({ item }) => <List item={item} />}
                 keyExtractor={item => item._id}
             />
+            
         </View>
 
     );
@@ -69,29 +88,38 @@ const styles = StyleSheet.create({
     flatlist: {
         marginBottom: 15,
         flexDirection: "column",
-        flex: 1,
-        marginLeft:10,
-        marginTop:20,
-        backgroundColor:"green",
-        
-    },userData: {
-        marginRight: 5,
-        flexDirection: 'row',
-        flex: 1,
+        flex: 2,
+        marginLeft: 20,
+        marginTop: 20,
+        marginRight: 20,
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5
 
-    },userTitle: {
+    }, userData: {
+        flex: 1,
+        flexDirection: "row"
+
+    }, userTitle: {
+        width: 200,
         color: "black",
         marginRight: 1,
-        fontSize: 15,
-        backgroundColor:'red'
+        fontSize: 15
+
     }, addButton: {
-        backgroundColor: "red",
+        backgroundColor: '#ff8a24',
         width: 120,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        alignSelf:'flex-end',
+        alignSelf: 'flex-end',
+
+    }, left: {
+        flex: 1
+
+    }, right: {
+        flex: 1,
 
     }
 });
