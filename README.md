@@ -1,5 +1,5 @@
 
-# Jongy Admin-side
+# Jongy Admin-Side
 This is an admin-side application for Jongy
 
 
