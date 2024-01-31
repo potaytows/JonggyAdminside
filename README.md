@@ -1,6 +1,6 @@
 
-# Jongy Admin side
-This is a react-native application
+# Jongy Admin-side
+This is an admin-side application for Jongy
 
 
 ## Contributors
