@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useFocusEffect } from '@react-navigation/native';
 import { EvilIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
@@ -28,8 +29,8 @@ const User = ({ navigation, route }) => {
 
     const getUsers = async () => {
         try {
-            const response = await fetch(apiheader + '/users/getUsers/' + route.params?.username);
-            const result = await response.json();
+            const response = await axios.get(apiheader + '/users/getUsers/' + route.params?.username);
+            const result = await response.data;
             setData(result)
         } catch (error) {
             console.error(error);

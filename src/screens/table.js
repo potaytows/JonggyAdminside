@@ -7,6 +7,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import axios from 'axios';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
@@ -16,8 +17,8 @@ const Table = ({ route }) => {
 
     const getTables = async () => {
         try {
-            const response = await fetch(apiheader + '/tables/getbyRestaurantId/' + route.params.restaurant_id);
-            const result = await response.json();
+            const response = await axios.get(apiheader + '/tables/getbyRestaurantId/' + route.params.restaurant_id);
+            const result = await response.data;
             setData(result)
         } catch (error) {
             console.error(error);
@@ -59,6 +60,8 @@ const Table = ({ route }) => {
 
     );
 }
+
+
 
 const styles = StyleSheet.create({
     container: {

@@ -12,6 +12,8 @@ const table = ({name}) => {
   );
 };
 
+
+
 export default table;
 
 const styles = StyleSheet.create({

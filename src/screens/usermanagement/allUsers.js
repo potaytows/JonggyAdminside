@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button,Alert } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
@@ -15,6 +16,7 @@ const AllUsers = ({ navigation }) => {
     const [usersList, setData] = useState([]);
     const [imagePlace, setImage] = useState("");
     const isFocused = useIsFocused();
+    const [searchQuery, setSearchQuery] = useState('');
 
 
     // const loadImage = async (photo_reference) => {
@@ -33,7 +35,7 @@ const AllUsers = ({ navigation }) => {
     const List = ({ item }) => (
 
 
-        <TouchableOpacity onPress={() => navigation.navigate("User", { username: item.username})}>
+        <TouchableOpacity onPress={() => navigation.navigate("User", { username: item.username })}>
             <View style={flatlist}>
                 <View stlye={restaurantData}>
                     <Text style={restaurantTitle} adjustsFontSizeToFit={true}
@@ -53,9 +55,31 @@ const AllUsers = ({ navigation }) => {
     const getRestaurants = async () => {
         setLoading(true);
         try {
-            const response = await fetch(apiheader + '/users/getUsers');
-            const result = await response.json();
+            const response = await axios.get(apiheader + '/users/getUsers');
+            const result = await response.data;
             setData(result)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSearch = async () => {
+        setLoading(true);
+        try {
+
+            if (searchQuery == "") {
+                const response = await axios.get(apiheader + '/users/getUsers');
+                const result = await response.data;
+                setData(result)
+                
+            } else {
+                const response = await axios.get(apiheader + '/users/getlikeUsers/' + searchQuery);
+                const result = await response.data;
+                setData(result)
+            }
+
         } catch (error) {
             console.error(error);
         } finally {
@@ -66,12 +90,15 @@ const AllUsers = ({ navigation }) => {
 
 
 
+    useEffect(() => {
+        handleSearch();
 
+    }, [searchQuery]);
     useFocusEffect(
         React.useCallback(() => {
-          getRestaurants();
+            getRestaurants();
         }, [])
-      );
+    );
 
 
     return (
@@ -88,6 +115,16 @@ const AllUsers = ({ navigation }) => {
             </View>
             <View style={styles.topper}>
 
+            </View>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="ค้นหาผู้ใช้"
+                    value={searchQuery}
+                    onChangeText={(text) => {
+                        setSearchQuery(text);
+                    }}
+                />
             </View>
             <FlatList
                 data={usersList}
@@ -142,16 +179,32 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flex: 1
     }, topper: {
-        flexDirection:"row-reverse",
-        marginTop:20
-    },addButton:{
-        backgroundColor:"black",
-        width:120,
-        height:30,
+        flexDirection: "row-reverse",
+        marginTop: 20
+    }, addButton: {
+        backgroundColor: "black",
+        width: 120,
+        height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal:20,
-        borderRadius:10
+        marginHorizontal: 20,
+        borderRadius: 10
+
+    }, searchInput: {
+        height: 40,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        paddingLeft: 10,
+        flex: 1,
+        marginRight: 5,
+    }, searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        marginRight: '5%',
+        marginLeft: '5%',
+        marginBottom: 30
 
     }
 

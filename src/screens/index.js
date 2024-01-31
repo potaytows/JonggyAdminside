@@ -13,15 +13,14 @@ const Index = ({ navigation }) => {
     const getLoginInformation = async () => {
 
         try {
-          user = await SecureStore.getItemAsync('userAuth');
-          console.log(user)
-          
-    
+            user = await SecureStore.getItemAsync('userAuth');
+            console.log(user)
+
+
         } catch (e) {
-          console.log(e)
+            console.log(e)
         };
-      };
-    
+    };
 
     useEffect(() => {
         getLoginInformation()
@@ -41,7 +40,7 @@ const Index = ({ navigation }) => {
                 </Text>
 
             </View>
-            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap',justifyContent:'center' }}>
+            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <TouchableOpacity onPress={() => navigation.navigate("allRestaurants")}>
                     <View style={{ height: 150 }}>
                         <View style={styles.item}>
@@ -51,7 +50,7 @@ const Index = ({ navigation }) => {
 
 
                     </View>
-                    
+
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("allUsers")}>
                     <View style={{ height: 150 }}>
@@ -62,7 +61,7 @@ const Index = ({ navigation }) => {
 
 
                     </View>
-                    
+
                 </TouchableOpacity>
 
 
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         marginTop: 20,
-        marginHorizontal:15
+        marginHorizontal: 15
 
     }, itemTitle: {
         textAlign: 'center',
@@ -104,11 +103,11 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black'
 
-    },wrapper:{
-        flex:1,
-        justifyContent:'center',
-        flexDirection:'column',
-        alignItems:"center",
+    }, wrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: "center",
     }
 });
 

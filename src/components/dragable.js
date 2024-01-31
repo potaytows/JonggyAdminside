@@ -11,16 +11,12 @@ import Animated, {
 import { StyleSheet, } from 'react-native';
 
 import Table from './table';
+import axios from 'axios';
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const updateTable = async (xTrans,yTrans,id) => {
     try {
-        const fetchOptions={
-            method:'PUT',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({x:xTrans,y:yTrans})
-        }
-        const response = await fetch(apiheader + '/tables/edit/' + id,fetchOptions);
+        const response = await axios.put(apiheader + '/tables/edit/' + id,{x:xTrans,y:yTrans});
     } catch (error) {
         console.error(error);
     }

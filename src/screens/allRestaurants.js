@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button,Alert } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 
 
@@ -11,30 +12,25 @@ const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const Index = ({ navigation }) => {
     const { linearGradient, restaurantTitle, flatlist, container, loadingindi, restaurantData } = styles
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [RestaurantList, setData] = useState([]);
     const [imagePlace, setImage] = useState("");
-    const isFocused = useIsFocused();
+    const [searchQuery, setSearchQuery] = useState('');
 
-
-    // const loadImage = async (photo_reference) => {
-    //     try {
-    //         const res = await fetch(
-    //             `https://placebear.com/200/300`
-    //         )   
-    //         const data = await res.blob();
-    //         setImage(data);
-    //         console.log(data)
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-    // };
 
     const List = ({ item }) => (
 
 
-        <TouchableOpacity onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id,newOwner:""})}>
+        <TouchableOpacity onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id, newOwner: "" })}>
             <View style={flatlist}>
+                <View style={styles.Logo}>
+                    <AutoHeightImage
+                        width={100}
+                        height={100}
+                        source={{uri:apiheader+'/image/getRestaurantIcon/'+item._id}}
+
+                    />
+                </View>
                 <View stlye={restaurantData}>
                     <Text style={restaurantTitle} adjustsFontSizeToFit={true}
                         numberOfLines={2}>
@@ -58,8 +54,8 @@ const Index = ({ navigation }) => {
     const getRestaurants = async () => {
         setLoading(true);
         try {
-            const response = await fetch(apiheader + '/restaurants');
-            const result = await response.json();
+            const response = await axios.get(apiheader + '/restaurants');
+            const result = await response.data;
             setData(result)
         } catch (error) {
             console.error(error);
@@ -67,16 +63,35 @@ const Index = ({ navigation }) => {
             setLoading(false);
         }
     };
+    const handleSearch = async () => {
+        setLoading(true);
+        try {
 
+            if (searchQuery == "") {
+                getRestaurants();
 
+            } else {
+                const response = await axios.get(apiheader + '/restaurants/getlikeRestaurants/' + searchQuery);
+                const result = await response.data;
+                setData(result)
+            }
 
-
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useFocusEffect(
         React.useCallback(() => {
-          getRestaurants();
+            getRestaurants();
         }, [])
-      );
+    );
+    useEffect(() => {
+        handleSearch();
+
+    }, [searchQuery]);
 
 
     return (
@@ -88,21 +103,39 @@ const Index = ({ navigation }) => {
 
 
         <SafeAreaView style={container}>
-            <View style={loadingindi}>
-                <ActivityIndicator size={"large"} animating={isLoading} style={loadingindi} />
-            </View>
+            {isLoading && <View style={styles.activityIndicatorBody}>
+                <ActivityIndicator size="large" color='#ff8a24' animating={isLoading} />
+            </View>}
+
+
             <View style={styles.topper}>
-            <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("addRestaurant")}>
-                <Text style={{color:"white"}}>เพิ่มร้านอาหาร</Text>
 
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("addRestaurant")}>
+                    <Text style={{ color: "white" }}>เพิ่มร้านอาหาร</Text>
 
+                </TouchableOpacity>
+
+            </View>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="ค้นหาร้านค้า"
+                    value={searchQuery}
+                    onChangeText={(text) => {
+                        setSearchQuery(text);
+                    }}
+                />
             </View>
             <FlatList
                 data={RestaurantList}
                 renderItem={({ item }) => <List item={item} />}
                 keyExtractor={item => item._id}
             />
+
+
+
+
+
         </SafeAreaView>
 
     )
@@ -151,16 +184,47 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flex: 1
     }, topper: {
-        flexDirection:"row-reverse",
-        marginTop:20
-    },addButton:{
-        backgroundColor:"black",
-        width:120,
-        height:30,
+        flexDirection: "row-reverse",
+        marginTop: 10
+    }, addButton: {
+        backgroundColor: "black",
+        width: 120,
+        height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal:20,
-        borderRadius:10
+        marginHorizontal: 20,
+        borderRadius: 10
+
+    }, activityIndicatorBody: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    }, searchInput: {
+        height: 40,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        paddingLeft: 10,
+        flex: 1,
+        marginRight: 5,
+    }, searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        marginRight: '5%',
+        marginLeft: '5%',
+        marginBottom: 30
+
+    },
+    Logo: {
+        justifyContent: 'center',
+        maxHeight: 300,
+        maxWidth: 120,
+        alignItems: 'center'
 
     }
 

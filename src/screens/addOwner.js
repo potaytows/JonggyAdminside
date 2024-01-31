@@ -1,9 +1,10 @@
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, StatusBar,ToastAndroid, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
@@ -15,8 +16,8 @@ const AddOwner = ({ navigation,route }) => {
 
     const getUsers = async () => {
         try {
-            const response = await fetch(apiheader + '/users/getUsers');
-            const result = await response.json();
+            const response = await axios.get(apiheader + '/users/getUsers');
+            const result = await response.data;
             setUsers(result)
         } catch (error) {
             console.error(error);
@@ -24,7 +25,7 @@ const AddOwner = ({ navigation,route }) => {
     };
     const List = ({ item }) => (
 
-
+        
 
         <View style={styles.flatlist}>
 
@@ -47,7 +48,7 @@ const AddOwner = ({ navigation,route }) => {
                             
                         },
 
-                    });
+                    }),ToastAndroid.showWithGravityAndOffset('Added '+item.username+' as draft',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
                 }}>
                     <Text style={{ color: 'white' }}>เพิ่ม {item.username}</Text>
                 </TouchableOpacity>
@@ -70,6 +71,7 @@ const AddOwner = ({ navigation,route }) => {
 
     return (
         <View style={styles.container}>
+            {userList<1 && <View style={{flex:1, justifyContent: 'center',alignItems: 'center',}}><Text>ไม่มีผู้ใช้ที่สามารถเลือกได้</Text></View>}
             <FlatList
                 data={userList}
                 renderItem={({ item }) => <List item={item} />}
