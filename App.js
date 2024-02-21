@@ -11,17 +11,11 @@ const Stack = createStackNavigator();
 
 const App = () => {
   const [UserAuth, setUserAuth] = useState((""));
-
-
-
-
   const getLoginInformation = async () => {
 
     try {
       user = await SecureStore.getItemAsync('userAuth');
       setUserAuth(user)
-      console.log(UserAuth)
-      console.log(process.env.EXPO_PUBLIC_apiURI)
 
     } catch (e) {
       console.log(e)

@@ -5,9 +5,11 @@ import AutoHeightImage from 'react-native-auto-height-image'
 import { useFocusEffect } from '@react-navigation/native';
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
+
 
 const Restaurant = ({ navigation, route }) => {
     const [isLoading, setLoading] = useState(false);
@@ -17,6 +19,7 @@ const Restaurant = ({ navigation, route }) => {
     const [imagePlace, setImage] = useState("");
     const [screenState, setScreenState] = useState("");
     const [isDrafting, setDrafting] = useState(false);
+    const [imageuri, setImageUri] = useState("")
 
 
     const CheckState = () => {
@@ -35,27 +38,22 @@ const Restaurant = ({ navigation, route }) => {
     }
 
     const ConfirmButton = ({ }) => {
-        if (screenState == "noOwner") {
-            return (
-
-                <View style={styles.DisabledaddButton}>
-                    <Text style={{ color: "white" }}>ยืนยัน</Text>
-                </View>
-            )
-        } if (screenState == "drafting") {
+        if (screenState == "drafting") {
             return (
 
                 <View>
-                    <TouchableOpacity style={styles.addButton} onPress={() => fetchAddOwner()}>
+                    <TouchableOpacity style={styles.addButton} onPress={() => Alert.alert('ยืนยันการแต่งตั้งเจ้าของร้าน ' + Restaurant.restaurantName, 'กรุณาตรวจสอบว่าคุณต้องการเพิ่ม ' + newowner + " เป็นเจ้าของร้าน " + Restaurant.restaurantName + " หรือไม่ เมื่อทำการยืนยันแล้ว คุณจะไม่สามารถลบผู้ใช้นี้ออกจากการเป็นเจ้าของได้ ต้องทำการเปลี่ยนเจ้าของเท่านั้น", [
+                        {
+                            text: 'ยกเลิก',
+                        },
+                        { text: 'ยืนยัน', onPress: () => fetchAddOwner() },
+                    ])}>
+
+
+
+
                         <Text style={{ color: "white" }}>ยืนยัน</Text>
                     </TouchableOpacity>
-                </View>
-            )
-        } if (screenState == "haveowner") {
-            return (
-
-                <View style={styles.DisabledaddButton}>
-                    <Text style={{ color: "white" }}>ยืนยัน</Text>
                 </View>
             )
         }
@@ -111,7 +109,7 @@ const Restaurant = ({ navigation, route }) => {
         }
 
     };
-;
+    ;
     const fetchAddOwner = async () => {
         setLoading(true)
         try {
@@ -120,6 +118,8 @@ const Restaurant = ({ navigation, route }) => {
             console.log(result);
             setDrafting(false)
             navigation.navigate("allRestaurants")
+            ToastAndroid.showWithGravityAndOffset('Added ' + newowner + " as " + Restaurant.restaurantName + "'s owner", ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+
         } catch (error) {
             console.log(error);
             ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
@@ -135,6 +135,7 @@ const Restaurant = ({ navigation, route }) => {
             const result = await response.data;
             setData(result)
             setOwner(result.owner)
+            setImageUri(apiheader+"/image/getRestaurantIcon/"+result._id)
         } catch (error) {
             console.log(error);
             ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
@@ -163,6 +164,7 @@ const Restaurant = ({ navigation, route }) => {
     });
     useEffect(() => {
         getRestaurants();
+        console.log(imageuri)
 
     }, []);
     useFocusEffect(
@@ -176,40 +178,57 @@ const Restaurant = ({ navigation, route }) => {
             {isLoading && <View style={styles.activityIndicatorBody}>
                 <ActivityIndicator size="large" color='#ff8a24' animating={isLoading} />
             </View>}
-            
-            <View style={styles.textHeader}>
-                <Text style={styles.restaurantname}>{Restaurant.restaurantName}</Text>
-                <Text style={styles.restaurantID}>ID :{Restaurant._id}</Text>
+            <ScrollView>
+                {imageuri &&
+                    <View style={styles.Logo}>
+                        <AutoHeightImage
+                            width={400}
+                            source={{ uri: imageuri }}
+                            borderRadius={5}
+                        />
+                    </View>
+                }
 
 
-            </View>
-            <View style={styles.middle}>
-                
-                <View style={styles.middleleft}>
-                    <OwnerComp />
+                <View style={styles.textHeader}>
+                    <Text style={styles.restaurantname}>{Restaurant.restaurantName}</Text>
+                    <Text style={styles.restaurantID}>ID :{Restaurant._id} {imageuri} </Text>
+                    <Text style={styles.restaurantID}>สถานะ : {Restaurant.status == "closed" && <Text>ปิดทำการ</Text>}{Restaurant.status == "open" && <Text>เปิดทำการ</Text>}</Text>
 
-                </View>
-                <View style={styles.middleright}>
-                    <TouchableOpacity style={styles.deleteButton} onPress={()=> Alert.alert('ยืนยันการลบ', 'คุณต้องการลบ '+Restaurant.restaurantName+" หรือไม่", [
-                        {
-                            text: 'ยกเลิก',
-                        },
-                        { text: 'ยืนยัน', onPress: () => fetchdeleteRestaurant() },
-                    ])}>
 
-                        <Text style={{ color: "white" }}>ลบ</Text>
-
-                    </TouchableOpacity>
 
                 </View>
+                <View style={styles.middle}>
+
+                    <View style={styles.middleleft}>
+                        <OwnerComp />
+
+                    </View>
+                    <View style={styles.middleright}>
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => Alert.alert('ยืนยันการลบ', 'คุณต้องการลบ ' + Restaurant.restaurantName + " หรือไม่", [
+                            {
+                                text: 'ยกเลิก',
+                            },
+                            { text: 'ยืนยัน', onPress: () => fetchdeleteRestaurant() },
+                        ])}>
+                            
+
+                            <Text style={{ color: "white" }}>ลบ</Text>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.tableButton} onPress={() => navigation.navigate("Tables", { restaurant_id: Restaurant._id})}><Text>Tables</Text></TouchableOpacity>
+
+                    </View>
 
 
-            </View>
+                </View>
+            </ScrollView>
             <View style={styles.addButtonCont}>
                 <ConfirmButton />
             </View>
 
         </SafeAreaView>
+
 
     )
 }
@@ -234,6 +253,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         alignSelf: 'flex-end'
+
+    },tableButton:{
+        backgroundColor: "blue",
+        width: 120,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+
 
     }, textHeader: {
         marginLeft: 20,
@@ -299,7 +327,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
         alignSelf: 'center',
         justifyContent: 'center'
-    }
+    }, Logo: {
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
 
 
 

@@ -7,13 +7,17 @@ import axios from 'axios';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
+let numOfLinesCompany = 0;
 const AddRestaurant = ({ navigation, route }) => {
     const [isLoading, setLoading] = useState(false);
     const [restaurantName, onRestaurantNameChange] = React.useState('');
+    const [description, onDescriptionChange] = React.useState('');
+    const [height, setHeight] = useState(0);
+
     const [image, setImage] = useState(null);
 
     const pickImage = async () => {
-        
+
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -36,34 +40,34 @@ const AddRestaurant = ({ navigation, route }) => {
 
 
     const fetchAddRestaurant = async () => {
-        
 
-            setLoading(true);
-            try {
-                const formData = new FormData();
-                formData.append("image", image);
-                formData.append("restaurantName", restaurantName)
-                console.log(formData)
-                const response = await axios.post(apiheader + '/restaurants/addRestaurant',
-                    formData, {
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                const result = await response.data;
-                navigation.navigate("allRestaurants")
-                ToastAndroid.showWithGravityAndOffset('Added ' + restaurantName, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
-            } catch (error) {
-                console.log(error);
-                ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
-            } finally {
-                setLoading(false);
-                setImage(null)
-            }
 
-        
-    
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("image", image);
+            formData.append("restaurantName", restaurantName)
+            console.log(formData)
+            const response = await axios.post(apiheader + '/restaurants/addRestaurant',
+                formData, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const result = await response.data;
+            navigation.navigate("allRestaurants")
+            ToastAndroid.showWithGravityAndOffset('Added ' + restaurantName, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+        } catch (error) {
+            console.log(error);
+            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+        } finally {
+            setLoading(false);
+            setImage(null)
+        }
+
+
+
 
     }
 
@@ -79,14 +83,26 @@ const AddRestaurant = ({ navigation, route }) => {
 
             <View style={styles.restaurantNameCont}>
                 <Text>ชื่อร้านอาหาร</Text>
-                <View style={{ width: 350, height: 35, marginTop: 5, alignContent: 'center' }}>
+                <View style={{ width: '100%', height: 40, marginTop: 5, alignContent: 'center' }}>
                     <TextInput
                         style={styles.input}
                         onChangeText={onRestaurantNameChange}
                         value={restaurantName}
+                        placeholder='ใส่ชื่อร้านของคุณ'
                     />
-
-
+                </View>
+                <Text>คำอธิบายร้าน (Description)</Text>
+                <View style={{ width: '100%', marginTop: 5, alignContent: 'center',height: Math.max(35, height) }}>
+                    <TextInput
+                        onChangeText={onDescriptionChange}
+                        value={description}
+                        placeholder='ใส่คำอธิบาย'
+                        multiline={true}
+                        onContentSizeChange={(event) =>
+                            setHeight(event.nativeEvent.contentSize.height)
+                          }
+                        style={[styles.Descriptioninput,{height: Math.max(35, height) }]}
+                    />
                 </View>
                 <View style={styles.imageButton}>
                     <Button title="เลือกรูปภาพ" onPress={pickImage} style={styles.addImageButton} />
@@ -136,7 +152,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         flex: 1,
         borderRadius: 5,
-        padding: 10
+        padding: 10,
+        backgroundColor: 'white'
+    }, Descriptioninput: {
+        borderWidth: 1,
+        flex: 1,
+        borderRadius: 5,
+        padding: 10,
+        backgroundColor: 'white'
+
     }, restaurantNameCont: {
         marginHorizontal: 20,
         marginTop: 10,

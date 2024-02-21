@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, ScrollView,TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useIsFocused } from "@react-navigation/native";
@@ -13,7 +13,7 @@ const apiheader = process.env.EXPO_PUBLIC_apiURI;
 const AllUsers = ({ navigation }) => {
     const { linearGradient, restaurantTitle, flatlist, container, loadingindi, restaurantData } = styles
     const [isLoading, setLoading] = useState(true);
-    const [usersList, setData] = useState([]);
+    const [usersList, setUsers] = useState([]);
     const [imagePlace, setImage] = useState("");
     const isFocused = useIsFocused();
     const [searchQuery, setSearchQuery] = useState('');
@@ -51,20 +51,6 @@ const AllUsers = ({ navigation }) => {
 
     );
 
-
-    const getRestaurants = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(apiheader + '/users/getUsers');
-            const result = await response.data;
-            setData(result)
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const handleSearch = async () => {
         setLoading(true);
         try {
@@ -72,12 +58,12 @@ const AllUsers = ({ navigation }) => {
             if (searchQuery == "") {
                 const response = await axios.get(apiheader + '/users/getUsers');
                 const result = await response.data;
-                setData(result)
-                
+                setUsers(result)
+
             } else {
                 const response = await axios.get(apiheader + '/users/getlikeUsers/' + searchQuery);
                 const result = await response.data;
-                setData(result)
+                setUsers(result)
             }
 
         } catch (error) {
@@ -96,7 +82,7 @@ const AllUsers = ({ navigation }) => {
     }, [searchQuery]);
     useFocusEffect(
         React.useCallback(() => {
-            getRestaurants();
+            handleSearch();
         }, [])
     );
 
@@ -126,11 +112,31 @@ const AllUsers = ({ navigation }) => {
                     }}
                 />
             </View>
-            <FlatList
-                data={usersList}
-                renderItem={({ item }) => <List item={item} />}
-                keyExtractor={item => item._id}
-            />
+            {usersList < 1 && <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}><Text>ไม่มีผู้ใช้ที่สามารถเลือกได้</Text></View>}
+            <ScrollView>
+                <View>
+                    {usersList != undefined ? usersList.map((item, index) => (
+                        usersList && index == undefined ? (
+                            <View key={item.id}><Text>ไม่พบข้อมูลผู้ใช้</Text></View>
+
+                        ) : (
+                            <TouchableOpacity onPress={() => navigation.navigate("User", { username: item.username })} key={index}>
+                                <View style={flatlist}>
+                                    <View stlye={restaurantData}>
+                                        <Text style={restaurantTitle} adjustsFontSizeToFit={true}
+                                            numberOfLines={2}>
+                                            {item.username}
+                                        </Text>
+                                    </View>
+
+
+                                </View>
+                            </TouchableOpacity>
+                        )
+
+                    )) : <View><Text>กำลังโหลดข้อมูล!</Text></View>}
+                </View>
+            </ScrollView>
         </SafeAreaView>
 
     )

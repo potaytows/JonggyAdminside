@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useSharedValue } from 'react-native-reanimated';
-
 import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios';
+
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
 const Table = ({ route }) => {
     const [obj, setData] = useState([]);
     const [tables, setTableData] = useState([]);
-
+    const updateTable = async (xTrans, yTrans, id) => {
+        console.log(id)
+        try {
+            const response = await axios.put(apiheader + '/tables/edit/' + id, { x: xTrans, y: yTrans });
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const getTables = async () => {
         try {
             const response = await axios.get(apiheader + '/tables/getbyRestaurantId/' + route.params.restaurant_id);
@@ -24,38 +27,28 @@ const Table = ({ route }) => {
             console.error(error);
         }
     };
+
     useEffect(() => {
         getTables()
 
     }, []);
 
 
+
     return (
-        <SafeAreaProvider style={styles.container}>
-            <GestureHandlerRootView style={styles.container}>
-                <SafeAreaView style={styles.container}>
-                    <View style={styles.wrapper}>
-                        <View style={styles.dragablecontainer}>
-                        {obj.map(item => (
-                            <Dragable key={item.tableName} id={item._id} x={item.x} y={item.y} item={item}>
-                            </Dragable>
-                        ))}
-
-                        </View>
-                        
-
+        <SafeAreaView style={styles.container}>
+            
+            <View style={styles.dragablecontainer}>
+                {obj.map((item,index)=> (
+                    <View style={styles.dragableontent} key={index}>
+                        <Dragable key={item.tableName} id={item._id} x={item.x} y={item.y} item={item}>
+                        </Dragable>
                     </View>
-                    <View style={styles.submitcontainer}>
-                        {/* <Button
-                            title="Press me"
-                            color="#f194ff"
-                        onPress={() => Alert.alert('Button with adjusted color pressed')}
-                        /> */}
-                    </View>
+                ))}
+            </View>
 
-                </SafeAreaView>
-            </GestureHandlerRootView>
-        </SafeAreaProvider>
+        </SafeAreaView>
+
 
 
     );
@@ -66,20 +59,23 @@ const Table = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        
-        backgroundColor: 'white',
-    },
-    wrapper: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        padding: 16,
     },
     dragablecontainer: {
-        height:'80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'gray',
+        width: 350,
+        height: 450,
+        alignSelf:'center'
+
     },
     submitcontainer: {
         flexDirection: 'column',
         flex: 1
+    }, dragableontent: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

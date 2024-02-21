@@ -32,6 +32,7 @@ const User = ({ navigation, route }) => {
             const response = await axios.get(apiheader + '/users/getUsers/' + route.params?.username);
             const result = await response.data;
             setData(result)
+            console.log(result)
         } catch (error) {
             console.error(error);
         } finally {
@@ -41,23 +42,33 @@ const User = ({ navigation, route }) => {
     useEffect(() => {
         getUsers();
 
-    },[]);
-    
+    }, []);
+
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.textHeader}>
-                <Text style={styles.restaurantname}>{User.username}</Text>
-                <Text style={styles.restaurantID}>ID: {User._id} </Text>
+
+            {User ? (
+                <View style={styles.textHeader}>
+                    <Text style={styles.restaurantname}>{User.username}</Text>
+                    <Text style={styles.restaurantID}>ID: {User._id} </Text>
+                </View>
+            ) : (
+                <View style={styles.textHeader}>
+                    <Text>ไม่พบข้อมูลผู้ใช้</Text>
+                </View>
+
+            )}
 
 
-            </View>
+
+
             <View style={styles.middle}>
                 <View style={styles.middleleft}>
-           
+
                 </View>
                 <View style={styles.middleright}>
-                    
+
 
                 </View>
 
@@ -65,7 +76,7 @@ const User = ({ navigation, route }) => {
 
             </View>
             <View style={styles.addButtonCont}>
-          
+
             </View>
 
         </SafeAreaView>

@@ -14,7 +14,6 @@ const Index = ({ navigation }) => {
 
         try {
             user = await SecureStore.getItemAsync('userAuth');
-            console.log(user)
 
 
         } catch (e) {

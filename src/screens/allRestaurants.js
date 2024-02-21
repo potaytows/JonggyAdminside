@@ -6,6 +6,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
@@ -16,34 +17,6 @@ const Index = ({ navigation }) => {
     const [RestaurantList, setData] = useState([]);
     const [imagePlace, setImage] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
-
-
-    const List = ({ item }) => (
-
-
-        <TouchableOpacity onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id, newOwner: "" })}>
-            <View style={flatlist}>
-                <View style={styles.Logo}>
-                    <AutoHeightImage
-                        width={100}
-                        height={100}
-                        source={{uri:apiheader+'/image/getRestaurantIcon/'+item._id}}
-
-                    />
-                </View>
-                <View stlye={restaurantData}>
-                    <Text style={restaurantTitle} adjustsFontSizeToFit={true}
-                        numberOfLines={2}>
-                        {item.restaurantName}
-                    </Text>
-                </View>
-
-
-            </View>
-        </TouchableOpacity>
-
-
-    );
 
     const Ifloading = () => {
         if (isLoading) {
@@ -95,11 +68,7 @@ const Index = ({ navigation }) => {
 
 
     return (
-        // {imagePlace ? (
-        //     <Image style={styles.logo}source={{uri: 'data:image/png;base64,'+imagePlace}}/>
-        // ) : (
-        //     <></>
-        // )}
+
 
 
         <SafeAreaView style={container}>
@@ -126,17 +95,45 @@ const Index = ({ navigation }) => {
                     }}
                 />
             </View>
-            <FlatList
+            {/* <FlatList
                 data={RestaurantList}
                 renderItem={({ item }) => <List item={item} />}
                 keyExtractor={item => item._id}
-            />
-
-
-
-
-
+            /> */}
+            <ScrollView>
+                <View style={flatlist}>
+                    {RestaurantList != undefined ? RestaurantList.map((item, index) => (
+                        RestaurantList && index == undefined ? (
+                            <View key={item}><Text>ไม่พบร้านอาหาร</Text></View>
+                        ) : (
+                            <TouchableOpacity key={index} onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id, newOwner: "" })}>
+                                <View style={styles.listitem} key={item}>
+                                    <View style={styles.Logo}>
+                                        <AutoHeightImage
+                                            width={90}
+                                            height={90}
+                                            source={{ uri: apiheader + '/image/getRestaurantIcon/' + item._id }}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                    <View stlye={restaurantData}>
+                                        <Text style={restaurantTitle} adjustsFontSizeToFit={true}
+                                            numberOfLines={2}>
+                                            {item.restaurantName}
+                                        </Text>
+                                        <Text style={styles.restaurantdesc} adjustsFontSizeToFit={true}
+                                            numberOfLines={2}>
+                                            {item.description}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    )) : <View key={item}><Text>กำลังโหลดข้อมูล!</Text></View>}
+                </View>
+            </ScrollView>
         </SafeAreaView>
+
 
     )
 }
@@ -169,6 +166,14 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontSize: 15,
         width: 230,
+        fontWeight: 'bold',
+    }, restaurantdesc: {
+        color: "black",
+        flex: 1,
+        marginRight: 1,
+        marginLeft: 20,
+        fontSize: 13,
+        width: 230,
     },
     Logo: {
         justifyContent: 'center',
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
         minHeight: 70,
         marginLeft: 15,
         marginBottom: 15,
-        flexDirection: "row",
+        flexDirection: "column",
         flex: 1
     }, topper: {
         flexDirection: "row-reverse",
@@ -217,14 +222,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: '5%',
         marginLeft: '5%',
-        marginBottom: 30
-
+        marginBottom: 20
     },
     Logo: {
         justifyContent: 'center',
         maxHeight: 300,
         maxWidth: 120,
         alignItems: 'center'
+
+    }, listitem: {
+        marginVertical: 10,
+        flexDirection:'row',
+        height:100,
 
     }
 

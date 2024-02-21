@@ -22,32 +22,17 @@ const Login = ({ navigation }) => {
             setUsername("");
         }, [])
     );
-    const fetchaddIcon = async () => {;
-        try {
-            const response = await axios.get(apiheader + '/image/getRestaurantIcon/65b908137230497ce0e6764f');
-            const result = await response.data;
-            setBase64("data:image/png;base64,"+result.toString('base64'))
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    useEffect(() => {
-        fetchaddIcon();
-    }, []);
-
-    
     const AuthCecker = async ()=>{
         try {
             const response = await axios.post(apiheader + '/users/auth/admin',{username:username,password:password});
             const result = await response.data;
-            console.log(result.status);
             if(result.status == "auth failed"){
-                ToastAndroid.showWithGravityAndOffset('you are not authorized.',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
+                ToastAndroid.showWithGravityAndOffset('เข้าสู่ระบบไม่สำเร็จ',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
                 console.log("auth did fail")
             }if(result.status == "auth success"){
                 await SecureStore.setItemAsync('userAuth',JSON.stringify(result.obj));
                 navigation.dispatch(StackActions.replace('Tabs'));
-                ToastAndroid.showWithGravityAndOffset('Login successfully!.',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
+                ToastAndroid.showWithGravityAndOffset('เข้าสู่ระะบบสำเร็จ!',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
                 
 
             }
@@ -64,7 +49,6 @@ const Login = ({ navigation }) => {
         <View style={styles.container}>
             <Image style={styles.Logo}
                 source={require('../../../assets/images/Jonggy_logo.png')}
-                // source={{uri:apiheader + '/image/getRestaurantIcon/65b908137230497ce0e6764f'.toString("base64")}}
             />
             <View style={styles.container2}>
                 <TextInput
