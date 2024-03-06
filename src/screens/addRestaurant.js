@@ -47,6 +47,8 @@ const AddRestaurant = ({ navigation, route }) => {
             const formData = new FormData();
             formData.append("image", image);
             formData.append("restaurantName", restaurantName)
+            formData.append("description", description)
+
             console.log(formData)
             const response = await axios.post(apiheader + '/restaurants/addRestaurant',
                 formData, {

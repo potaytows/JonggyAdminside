@@ -191,7 +191,8 @@ const Restaurant = ({ navigation, route }) => {
 
                 <View style={styles.textHeader}>
                     <Text style={styles.restaurantname}>{Restaurant.restaurantName}</Text>
-                    <Text style={styles.restaurantID}>ID :{Restaurant._id} {imageuri} </Text>
+                    <Text style={styles.restaurantID}>ID :{Restaurant._id} </Text>
+                    <Text style={styles.restaurantID}>description :{Restaurant.description} </Text>
                     <Text style={styles.restaurantID}>สถานะ : {Restaurant.status == "closed" && <Text>ปิดทำการ</Text>}{Restaurant.status == "open" && <Text>เปิดทำการ</Text>}</Text>
 
 
