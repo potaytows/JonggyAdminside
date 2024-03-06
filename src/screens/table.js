@@ -10,14 +10,6 @@ const apiheader = process.env.EXPO_PUBLIC_apiURI;
 const Table = ({ route }) => {
     const [obj, setData] = useState([]);
     const [tables, setTableData] = useState([]);
-    const updateTable = async (xTrans, yTrans, id) => {
-        console.log(id)
-        try {
-            const response = await axios.put(apiheader + '/tables/edit/' + id, { x: xTrans, y: yTrans });
-        } catch (error) {
-            console.error(error);
-        }
-    };
     const getTables = async () => {
         try {
             const response = await axios.get(apiheader + '/tables/getbyRestaurantId/' + route.params.restaurant_id);
@@ -36,18 +28,17 @@ const Table = ({ route }) => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        
             
             <View style={styles.dragablecontainer}>
                 {obj.map((item,index)=> (
-                    <View style={styles.dragableontent} key={index}>
+                    <View style={styles.dragablecontent} key={index}>
                         <Dragable key={item.tableName} id={item._id} x={item.x} y={item.y} item={item}>
                         </Dragable>
                     </View>
                 ))}
             </View>
 
-        </SafeAreaView>
 
 
 
@@ -72,7 +63,7 @@ const styles = StyleSheet.create({
     submitcontainer: {
         flexDirection: 'column',
         flex: 1
-    }, dragableontent: {
+    }, dragablecontent: {
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center'

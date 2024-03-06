@@ -10,6 +10,6 @@ This is an admin-side application for Jongy
 ## Related Repositories
 - [JongyApi](https://github.com/potaytows/JongyApi)
 - [JongyOwnerSide](https://github.com/potaytows/JongyOwnerSide)
-- [JongyClientSide](https://github.com/Ntpply/jongyClientside)
+- [JongyClientSide](https://github.com/potaytows/jongyClientside)
 
 

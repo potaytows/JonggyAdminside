@@ -164,7 +164,6 @@ const Restaurant = ({ navigation, route }) => {
     });
     useEffect(() => {
         getRestaurants();
-        console.log(imageuri)
 
     }, []);
     useFocusEffect(
@@ -216,7 +215,7 @@ const Restaurant = ({ navigation, route }) => {
                             <Text style={{ color: "white" }}>ลบ</Text>
 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.tableButton} onPress={() => navigation.navigate("Tables", { restaurant_id: Restaurant._id})}><Text>Tables</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.tableButton} onPress={() => navigation.navigate("Tables", { restaurant_id: Restaurant._id})}><Text style={{ color: "white" }}>Tables</Text></TouchableOpacity>
 
                     </View>
 
@@ -253,15 +252,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         alignSelf: 'flex-end'
-
     },tableButton:{
+
         backgroundColor: "blue",
         width: 120,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
-
+        borderRadius: 10,
+        alignContent:"flex-end",
+        marginTop:10
 
     }, textHeader: {
         marginLeft: 20,
@@ -292,8 +292,7 @@ const styles = StyleSheet.create({
         flex: 1
     }, middleright: {
         marginRight: 20,
-        flex: 1,
-        marginTop: 30
+        marginTop: 30,
     }, addButton: {
         backgroundColor: '#ff8a24',
         width: 120,

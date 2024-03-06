@@ -1,11 +1,12 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native'
+
 import Tabs from './src/components/Tabs'
 import addOwner from './src/screens/addOwner';
 import * as SecureStore from 'expo-secure-store';
 import Login from './src/screens/auth/login';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
