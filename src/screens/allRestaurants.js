@@ -63,27 +63,18 @@ const Index = ({ navigation }) => {
     );
     useEffect(() => {
         handleSearch();
-
     }, [searchQuery]);
 
 
     return (
-
-
-
         <SafeAreaView style={container}>
             {isLoading && <View style={styles.activityIndicatorBody}>
                 <ActivityIndicator size="large" color='#ff8a24' animating={isLoading} />
             </View>}
-
-
             <View style={styles.topper}>
-
                 <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("addRestaurant")}>
                     <Text style={{ color: "white" }}>เพิ่มร้านอาหาร</Text>
-
                 </TouchableOpacity>
-
             </View>
             <View style={styles.searchContainer}>
                 <TextInput

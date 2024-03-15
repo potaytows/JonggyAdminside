@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: '5%',
         marginLeft: '5%',
-        marginBottom: 30
+        marginBottom: 30,
+    
 
     }
 });

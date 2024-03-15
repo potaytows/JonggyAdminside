@@ -16,31 +16,32 @@ const Restaurant = ({ navigation, route }) => {
     const [Restaurant, setData] = useState([]);
     const [owner, setOwner] = useState("")
     const [newowner, setNewOwner] = useState("");
-    const [imagePlace, setImage] = useState("");
     const [screenState, setScreenState] = useState("");
     const [isDrafting, setDrafting] = useState(false);
     const [imageuri, setImageUri] = useState("")
+    const [tables, setTables] = useState([])
 
-
+    const getTables = async () => {
+        try {
+            const response = await axios.get(apiheader + '/tables/getbyRestaurantId/' + route.params.restaurant_id);
+            const result = await response.data;
+            setTables(result)
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const CheckState = () => {
         if (!owner && !newowner) {
             setScreenState("noOwner")
-
         } if (!owner && newowner) {
             setScreenState("drafting")
-
         } if (owner) {
             setScreenState("haveowner")
-
-
         }
-
     }
-
     const ConfirmButton = ({ }) => {
         if (screenState == "drafting") {
             return (
-
                 <View>
                     <TouchableOpacity style={styles.addButton} onPress={() => Alert.alert('ยืนยันการแต่งตั้งเจ้าของร้าน ' + Restaurant.restaurantName, 'กรุณาตรวจสอบว่าคุณต้องการเพิ่ม ' + newowner + " เป็นเจ้าของร้าน " + Restaurant.restaurantName + " หรือไม่ เมื่อทำการยืนยันแล้ว คุณจะไม่สามารถลบผู้ใช้นี้ออกจากการเป็นเจ้าของได้ ต้องทำการเปลี่ยนเจ้าของเท่านั้น", [
                         {
@@ -48,18 +49,12 @@ const Restaurant = ({ navigation, route }) => {
                         },
                         { text: 'ยืนยัน', onPress: () => fetchAddOwner() },
                     ])}>
-
-
-
-
                         <Text style={{ color: "white" }}>ยืนยัน</Text>
                     </TouchableOpacity>
                 </View>
             )
         }
     };
-
-
     const OwnerComp = ({ }) => {
         if (screenState == "noOwner") {
             return (
@@ -67,10 +62,8 @@ const Restaurant = ({ navigation, route }) => {
                     <Text style={{ marginVertical: 5 }}>ผู้ดูแล:</Text>
                     <TouchableOpacity style={styles.ownerButton} onPress={() => navigation.navigate("addOwner", { restaurant_id: route.params.restaurant_id })}>
                         <Text numberOfLines={1} style={{ color: "black" }}>ร้านนี้ยังไม่มีผู้ดูแล</Text>
-
                     </TouchableOpacity>
                 </View>
-
             )
         } if (screenState == "drafting") {
             return (
@@ -80,13 +73,9 @@ const Restaurant = ({ navigation, route }) => {
                         <Text numberOfLines={1} style={{ color: "black" }}>{newowner}</Text>
                         <TouchableOpacity onPress={() => setNewOwner("")}>
                             <EvilIcons name="close" size={20} color="red" />
-
                         </TouchableOpacity>
-
-
                     </View>
                 </View>
-
             )
         } if (screenState == "haveowner") {
             return (
@@ -96,18 +85,11 @@ const Restaurant = ({ navigation, route }) => {
                         <Text numberOfLines={1} style={{ color: "black" }}>{owner}</Text>
                         <TouchableOpacity onPress={() => { setOwner(""); setDrafting(true); }}>
                             <EvilIcons name="close" size={20} color="red" />
-
                         </TouchableOpacity>
-
-
                     </View>
                 </View>
-
             )
-
-
         }
-
     };
     ;
     const fetchAddOwner = async () => {
@@ -119,14 +101,12 @@ const Restaurant = ({ navigation, route }) => {
             setDrafting(false)
             navigation.navigate("allRestaurants")
             ToastAndroid.showWithGravityAndOffset('Added ' + newowner + " as " + Restaurant.restaurantName + "'s owner", ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
-
         } catch (error) {
             console.log(error);
             ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } finally {
             setLoading(false);
         }
-
     }
     const getRestaurants = async () => {
         setLoading(true)
@@ -135,7 +115,7 @@ const Restaurant = ({ navigation, route }) => {
             const result = await response.data;
             setData(result)
             setOwner(result.owner)
-            setImageUri(apiheader+"/image/getRestaurantIcon/"+result._id)
+            setImageUri(apiheader + "/image/getRestaurantIcon/" + result._id)
         } catch (error) {
             console.log(error);
             ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
@@ -156,22 +136,45 @@ const Restaurant = ({ navigation, route }) => {
             setLoading(false);
             navigation.navigate("allRestaurants")
         }
-
     }
     useEffect(() => {
         CheckState();
-
     });
     useEffect(() => {
         getRestaurants();
-
+        
     }, []);
     useFocusEffect(
         React.useCallback(() => {
             setNewOwner(route.params?.newOwner);
         }, [route.params])
+        
     );
-
+    useFocusEffect(
+        React.useCallback(() => {
+            getTables();
+        }, [])
+        
+    );
+    const TableComponent = (props) => {
+        const item = props.item
+        return (
+                <View style={styles.dragablecontent}>
+                    <View style={{ left: item.x, top: item.y }}>
+                        <View style={[styles.tablecontainer]}>
+                            <AutoHeightImage
+                                width={30}
+                                height={30}
+                                source={require('../../assets/images/table.png')}
+                                borderRadius={5}
+                            />
+                            <Text style={styles.text}>{item.tableName}</Text>
+                        </View>
+                    </View>
+                </View>
+            
+        )
+    }
     return (
         <SafeAreaView style={styles.container}>
             {isLoading && <View style={styles.activityIndicatorBody}>
@@ -187,22 +190,15 @@ const Restaurant = ({ navigation, route }) => {
                         />
                     </View>
                 }
-
-
                 <View style={styles.textHeader}>
                     <Text style={styles.restaurantname}>{Restaurant.restaurantName}</Text>
                     <Text style={styles.restaurantID}>ID :{Restaurant._id} </Text>
                     <Text style={styles.restaurantID}>description :{Restaurant.description} </Text>
                     <Text style={styles.restaurantID}>สถานะ : {Restaurant.status == "closed" && <Text>ปิดทำการ</Text>}{Restaurant.status == "open" && <Text>เปิดทำการ</Text>}</Text>
-
-
-
                 </View>
                 <View style={styles.middle}>
-
                     <View style={styles.middleleft}>
                         <OwnerComp />
-
                     </View>
                     <View style={styles.middleright}>
                         <TouchableOpacity style={styles.deleteButton} onPress={() => Alert.alert('ยืนยันการลบ', 'คุณต้องการลบ ' + Restaurant.restaurantName + " หรือไม่", [
@@ -211,28 +207,25 @@ const Restaurant = ({ navigation, route }) => {
                             },
                             { text: 'ยืนยัน', onPress: () => fetchdeleteRestaurant() },
                         ])}>
-                            
-
                             <Text style={{ color: "white" }}>ลบ</Text>
-
+                            {/* <TouchableOpacity style={styles.tableButton} onPress={() => navigation.navigate("Tables", { restaurant_id: Restaurant._id })}><Text style={{ color: "white" }}>Tables</Text></TouchableOpacity> */}
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.tableButton} onPress={() => navigation.navigate("Tables", { restaurant_id: Restaurant._id})}><Text style={{ color: "white" }}>Tables</Text></TouchableOpacity>
-
+                        <ConfirmButton />
                     </View>
 
-
+                </View>
+                <View style={styles.dragablecontainer}>
+                    {tables.map((item, index) => (
+                        <TableComponent item={item} key={index} />
+                    ))}
                 </View>
             </ScrollView>
             <View style={styles.addButtonCont}>
-                <ConfirmButton />
+                
             </View>
-
         </SafeAreaView>
-
-
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -253,7 +246,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         alignSelf: 'flex-end'
-    },tableButton:{
+    }, tableButton: {
 
         backgroundColor: "blue",
         width: 120,
@@ -261,8 +254,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        alignContent:"flex-end",
-        marginTop:10
+        alignContent: "flex-end",
+        marginTop: 10
 
     }, textHeader: {
         marginLeft: 20,
@@ -300,14 +293,14 @@ const styles = StyleSheet.create({
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 20,
         borderRadius: 10,
-        alignSelf: 'flex-end',
-        marginBottom: 30
+        alignContent: "flex-end",
+        marginTop: 10
 
     }, addButtonCont: {
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        zIndex:2000
     }, DisabledaddButton: {
         backgroundColor: 'gray',
         width: 120,
@@ -332,7 +325,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
     },
-
+    dragablecontainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 350,
+        height: 450,
+        alignSelf: 'center',
+        marginVertical: 50,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
+    tablecontainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    }, dragablecontent: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+    
+    }
 
 
 })

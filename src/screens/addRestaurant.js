@@ -4,34 +4,30 @@ import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
-let numOfLinesCompany = 0;
 const AddRestaurant = ({ navigation, route }) => {
     const [isLoading, setLoading] = useState(false);
     const [restaurantName, onRestaurantNameChange] = React.useState('');
     const [description, onDescriptionChange] = React.useState('');
     const [height, setHeight] = useState(0);
-
     const [image, setImage] = useState(null);
-
     const pickImage = async () => {
-
-        // No permissions request is necessary for launching the image library
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to choose an image.');
+            return;
+        }
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 1,
-            // base64:true
-
+            quality: 0.5,
         });
-
-
         if (!result.canceled) {
             setImage({ uri: result.assets[0].uri, type: 'image/png', name: 'uploadingimg' + Date.now() });
-            console.log(image)
         }
     };
 
@@ -40,26 +36,27 @@ const AddRestaurant = ({ navigation, route }) => {
 
 
     const fetchAddRestaurant = async () => {
-
-
         setLoading(true);
         try {
-            const formData = new FormData();
-            formData.append("image", image);
-            formData.append("restaurantName", restaurantName)
-            formData.append("description", description)
 
-            console.log(formData)
-            const response = await axios.post(apiheader + '/restaurants/addRestaurant',
-                formData, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const response = await axios.post(apiheader + '/restaurants/addRestaurant',{restaurantName:restaurantName,description:description});
             const result = await response.data;
-            navigation.navigate("allRestaurants")
-            ToastAndroid.showWithGravityAndOffset('Added ' + restaurantName, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+            if (result.status == "added succesfully") {
+                if (image) {
+                    const uploadResult = await FileSystem.uploadAsync(apiheader + '/restaurants/uploadImage/' + result.obj._id, image.uri, {
+                        httpMethod: 'POST',
+                        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+                        fieldName: 'image'
+                    });
+                } else {
+                    const response = await axios.post(apiheader + '/restaurants/uploadImage/' + result.obj._id+"/default");
+                    
+                }
+                navigation.navigate("allRestaurants")
+                ToastAndroid.showWithGravityAndOffset('Added ' + restaurantName, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+
+            }
+
         } catch (error) {
             console.log(error);
             ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
@@ -72,9 +69,6 @@ const AddRestaurant = ({ navigation, route }) => {
 
 
     }
-
-
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,7 +88,7 @@ const AddRestaurant = ({ navigation, route }) => {
                     />
                 </View>
                 <Text>คำอธิบายร้าน (Description)</Text>
-                <View style={{ width: '100%', marginTop: 5, alignContent: 'center',height: Math.max(35, height) }}>
+                <View style={{ width: '100%', marginTop: 5, alignContent: 'center', height: Math.max(35, height) }}>
                     <TextInput
                         onChangeText={onDescriptionChange}
                         value={description}
@@ -102,8 +96,8 @@ const AddRestaurant = ({ navigation, route }) => {
                         multiline={true}
                         onContentSizeChange={(event) =>
                             setHeight(event.nativeEvent.contentSize.height)
-                          }
-                        style={[styles.Descriptioninput,{height: Math.max(35, height) }]}
+                        }
+                        style={[styles.Descriptioninput, { height: Math.max(35, height) }]}
                     />
                 </View>
                 <View style={styles.imageButton}>

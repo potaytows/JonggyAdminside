@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'gray',
         width: 350,
         height: 450,
-        alignSelf:'center'
+        alignSelf:'center',
+        marginTop:40
 
     },
     submitcontainer: {

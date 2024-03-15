@@ -26,6 +26,7 @@ const Login = ({ navigation }) => {
         try {
             const response = await axios.post(apiheader + '/users/auth/admin',{username:username,password:password});
             const result = await response.data;
+            
             if(result.status == "auth failed"){
                 ToastAndroid.showWithGravityAndOffset('เข้าสู่ระบบไม่สำเร็จ',ToastAndroid.LONG,ToastAndroid.BOTTOM,25,50)
                 console.log("auth did fail")
