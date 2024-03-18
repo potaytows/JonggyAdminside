@@ -12,15 +12,20 @@ const Stack = createStackNavigator();
 
 const App = () => {
   const [UserAuth, setUserAuth] = useState((""));
-  const getLoginInformation = async () => {
+  const [isLoading, setisLoading] = useState(false);
 
+  const getLoginInformation = async () => {
+    setisLoading(true)
     try {
       user = await SecureStore.getItemAsync('userAuth');
       setUserAuth(user)
+    
 
     } catch (e) {
       console.log(e)
-    };
+    }finally{
+      setisLoading(false)
+    }
   };
 
   useEffect(() => {
@@ -30,35 +35,38 @@ const App = () => {
   }, []);
 
 
+  if (!isLoading) {
+    if (UserAuth == null) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
 
-  if (UserAuth == "") {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
 
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
 
-        </Stack.Navigator>
-      </NavigationContainer>
+      )
 
-    )
+    } else {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
+            <Stack.Screen name="Tabs" component={Tabs} options={({ route }) => ({ headerShown: false })} />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="addOwner" component={addOwner} options={{ title: false }} />
 
-  } else {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
-          <Stack.Screen name="Tabs" component={Tabs} options={({ route })=>({ headerShown: false})} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="addOwner" component={addOwner} options={{title: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      )
 
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
+    }
 
   }
 
 }
+
 
 
 export default App
