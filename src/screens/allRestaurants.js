@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import AutoHeightImage from 'react-native-auto-height-image'
 import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import axios from 'axios';
@@ -100,7 +99,7 @@ const Index = ({ navigation }) => {
                             <TouchableOpacity key={index} onPress={() => navigation.navigate("Restaurant", { restaurantName: item.restaurantName, restaurant_id: item._id, newOwner: "" })}>
                                 <View style={styles.listitem} key={item}>
                                     <View style={styles.Logo}>
-                                        <AutoHeightImage
+                                        <Image
                                             width={90}
                                             height={90}
                                             source={{ uri: apiheader + '/image/getRestaurantIcon/' + item._id }}

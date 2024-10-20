@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import StaticTable from '../components/staticTable';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 
@@ -156,25 +156,7 @@ const Restaurant = ({ navigation, route }) => {
         }, [])
         
     );
-    const TableComponent = (props) => {
-        const item = props.item
-        return (
-                <View style={styles.dragablecontent}>
-                    <View style={{ left: item.x, top: item.y }}>
-                        <View style={[styles.tablecontainer]}>
-                            <AutoHeightImage
-                                width={30}
-                                height={30}
-                                source={require('../../assets/images/table.png')}
-                                borderRadius={5}
-                            />
-                            <Text style={styles.text}>{item.tableName}</Text>
-                        </View>
-                    </View>
-                </View>
-            
-        )
-    }
+
     return (
         <SafeAreaView style={styles.container}>
             {isLoading && <View style={styles.activityIndicatorBody}>
@@ -216,7 +198,8 @@ const Restaurant = ({ navigation, route }) => {
                 </View>
                 <View style={styles.dragablecontainer}>
                     {tables.map((item, index) => (
-                        <TableComponent item={item} key={index} />
+                        <StaticTable key={index} id={item._id} x={item.x} y={item.y} item={item} >
+                        </StaticTable>
                     ))}
                 </View>
             </ScrollView>
@@ -326,14 +309,16 @@ const styles = StyleSheet.create({
 
     },
     dragablecontainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 350,
+        width: 380,
         height: 450,
         alignSelf: 'center',
-        marginVertical: 50,
-        borderColor: 'black',
-        borderWidth: 1,
+        marginTop: 40,
+        borderWidth: 2,
+        borderRadius: 5,
+        marginBottom: 20,
+        backgroundColor: 'white',
+        borderColor: '#CCCCCC',
+        overflow: 'hidden'
     },
     tablecontainer: {
         alignItems: 'center',
