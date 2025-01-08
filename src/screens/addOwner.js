@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
+import { StackActions } from '@react-navigation/native';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
@@ -79,14 +80,14 @@ const AddOwner = ({ navigation, route }) => {
                                 </View>
                                 <View style={styles.right}>
                                     <TouchableOpacity style={styles.addButton} onPress={() => {
-                                        navigation.navigate('Tabs', {
+                                        navigation.dispatch(StackActions.replace('Tabs',{
                                             screen: 'หน้าหลัก',
                                             params: {
                                                 screen: 'Restaurant',
                                                 params: { newOwner: item.username, restaurant_id: route.params.restaurant_id },
                                                 merge: true
                                             },
-                                        }), ToastAndroid.showWithGravityAndOffset('Added ' + item.username + ' as draft', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+                                        }), ToastAndroid.showWithGravityAndOffset('Added ' + item.username + ' as draft', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50));
                                     }}>
                                         <Text style={{ color: 'white' }}>เพิ่ม {item.username}</Text>
                                     </TouchableOpacity>

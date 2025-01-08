@@ -2,7 +2,6 @@ import React,{ useEffect } from 'react';
 import { PanGestureHandler, GestureHandlerRootView, Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
     runOnJS,
-    useAnimatedGestureHandler,
     useAnimatedStyle,
     useSharedValue,
     clamp
@@ -12,7 +11,6 @@ import Animated, {
 import { StyleSheet, Text } from 'react-native';
 import Table from './table';
 import axios from 'axios';
-import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

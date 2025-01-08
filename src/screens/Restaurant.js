@@ -55,7 +55,7 @@ const Restaurant = ({ navigation, route }) => {
             )
         }
     };
-    const OwnerComp = ({ }) => {
+    const OwnerComp = ({}) => {
         if (screenState == "noOwner") {
             return (
                 <View>
@@ -103,7 +103,7 @@ const Restaurant = ({ navigation, route }) => {
             ToastAndroid.showWithGravityAndOffset('Added ' + newowner + " as " + Restaurant.restaurantName + "'s owner", ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } catch (error) {
             console.log(error);
-            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, '+error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } finally {
             setLoading(false);
         }
@@ -131,7 +131,7 @@ const Restaurant = ({ navigation, route }) => {
             ToastAndroid.showWithGravityAndOffset('Deleted ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } catch (error) {
             console.log(error);
-            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, '+error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } finally {
             setLoading(false);
             navigation.navigate("allRestaurants")
@@ -197,10 +197,10 @@ const Restaurant = ({ navigation, route }) => {
 
                 </View>
                 <View style={styles.dragablecontainer}>
-                    {tables.map((item, index) => (
+                    {/* {tables.map((item, index) => (
                         <StaticTable key={index} id={item._id} x={item.x} y={item.y} item={item} >
                         </StaticTable>
-                    ))}
+                    ))} */}
                 </View>
             </ScrollView>
             <View style={styles.addButtonCont}>
