@@ -62,8 +62,28 @@ const Index = ({ navigation }) => {
                     </View>
 
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("promotion")}>
+                    <View style={{ height: 150, marginTop:30}}>
+                        <View style={styles.item}>
+
+                        </View>
+                        <Text style={styles.itemTitle}>โปรโมชัน</Text>
 
 
+                    </View>
+
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("petition")}>
+                    <View style={{ height: 150, marginTop:30}}>
+                        <View style={styles.item}>
+
+                        </View>
+                        <Text style={styles.itemTitle}>ตำร้อง</Text>
+
+
+                    </View>
+
+                </TouchableOpacity>
             </View>
 
 
