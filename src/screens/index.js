@@ -78,7 +78,7 @@ const Index = ({ navigation }) => {
                         <View style={styles.item}>
 
                         </View>
-                        <Text style={styles.itemTitle}>ตำร้อง</Text>
+                        <Text style={styles.itemTitle}>คำร้อง</Text>
 
 
                     </View>
