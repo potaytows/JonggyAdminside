@@ -10,7 +10,8 @@ import addRestaurant from '../screens/addRestaurant'
 import Promotion from '../screens/promotion'
 import Petition from '../screens/petition'
 import AddPromotion from '../screens/addPromotion'
-
+import UserHelpScreen from '../screens/userHelp'
+import UserTickScreen from '../screens/userTicket'
 const Stack = createStackNavigator();
 
 const Stacks = () => {
@@ -28,6 +29,8 @@ const Stacks = () => {
         <Stack.Screen name="promotion" component={Promotion} options={{title:"โปรโมชัน",headerTitleAlign:'center'}}/>
         <Stack.Screen name="petition" component={Petition} options={{title:"คำร้อง",headerTitleAlign:'center'}}/>
         <Stack.Screen name="addPromotion" component={AddPromotion} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
+        <Stack.Screen name="UserHelp" component={UserHelpScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
+        <Stack.Screen name="userTicket" component={UserTickScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
         
 
 
