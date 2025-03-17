@@ -1,72 +1,78 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
-
-import Tabs from './src/components/Tabs'
+import * as SplashScreen from 'expo-splash-screen';
+import Tabs from './src/components/Tabs';
 import addOwner from './src/screens/addOwner';
 import * as SecureStore from 'expo-secure-store';
 import Login from './src/screens/auth/login';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useFonts } from 'expo-font';
+
+SplashScreen.preventAutoHideAsync();
+
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [UserAuth, setUserAuth] = useState((""));
-  const [isLoading, setisLoading] = useState(false);
-
-  const getLoginInformation = async () => {
-    setisLoading(true)
-    try {
-      user = await SecureStore.getItemAsync('userAuth');
-      setUserAuth(user)
-    
-
-    } catch (e) {
-      console.log(e)
-    }finally{
-      setisLoading(false)
-    }
-  };
+  const [UserAuth, setUserAuth] = useState(null); // Initialize with null
+  const [isAuthChecked, setIsAuthChecked] = useState(false); // Track auth check completion
+  const [loaded, error] = useFonts({
+    'Kanit-Regular': require('./assets/fonts/Kanit-Regular.ttf'),
+    'Kanit-Bold': require('./assets/fonts/Kanit-Bold.ttf'),
+  });
 
   useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  useEffect(() => {
+    const getLoginInformation = async () => {
+      try {
+        const user = await SecureStore.getItemAsync('userAuth');
+        setUserAuth(user);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsAuthChecked(true);
+      }
+    };
+
     getLoginInformation();
-
-
   }, []);
 
-
-  if (!isLoading) {
-    if (UserAuth == null) {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
-
-            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-            <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-
-          </Stack.Navigator>
-        </NavigationContainer>
-
-      )
-
-    } else {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#ff8a24', }, headerTintColor: 'white' }}>
-            <Stack.Screen name="Tabs" component={Tabs} options={({ route }) => ({ headerShown: false })} />
-            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-            <Stack.Screen name="addOwner" component={addOwner} options={{ title: false }} />
-
-          </Stack.Navigator>
-        </NavigationContainer>
-      )
-
-    }
-
+  if (!loaded && !error) {
+    return null; // Prevents rendering before fonts are loaded
   }
 
-}
+  if (!isAuthChecked) {
+    return null; // Wait for auth check to complete before rendering
+  }
 
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: '#ff8a24' },
+          headerTintColor: 'white',
+        }}
+      >
+        {UserAuth == null ? (
+          <>
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="addOwner" component={addOwner} options={{ title: false }} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-
-export default App
+export default App;
