@@ -27,7 +27,9 @@ const Index = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         backgroundColor: 'white',
+        justifyContent:'center'
     },button: {
         backgroundColor: '#FF914D',
         width: '40%',
@@ -35,6 +37,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignSelf: 'center',
         borderRadius: 5
+    },
+    buttonText:{
+        textAlign:'center',
+        color:'white'
     }
 });
 
