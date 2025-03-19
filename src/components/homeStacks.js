@@ -12,6 +12,8 @@ import Petition from '../screens/petition'
 import AddPromotion from '../screens/addPromotion'
 import UserHelpScreen from '../screens/userHelp'
 import UserTickScreen from '../screens/userTicket'
+import WalletListScreen from '../screens/wallletList'
+import ProofImageScreen from '../screens/proofImage'
 const Stack = createStackNavigator();
 
 const Stacks = () => {
@@ -31,6 +33,9 @@ const Stacks = () => {
         <Stack.Screen name="addPromotion" component={AddPromotion} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
         <Stack.Screen name="UserHelp" component={UserHelpScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
         <Stack.Screen name="userTicket" component={UserTickScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
+        <Stack.Screen name="WalletList" component={WalletListScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
+        <Stack.Screen name="ProofImage" component={ProofImageScreen} options={{title:"เพิ่มโปรโมชัน",headerTitleAlign:'center'}}/>
+
         
 
 
