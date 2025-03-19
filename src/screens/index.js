@@ -101,6 +101,22 @@ const Index = ({ navigation }) => {
                     </View>
 
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("WalletList")}>
+                    <View style={{ height: 150, marginTop:30}}>
+                        <View style={styles.item}>
+                        <View style={styles.itemIcon}>
+                        
+                        <Image style={styles.profileImage} source={require('../../assets/images/hand.png')} />
+
+
+                            </View>
+                        </View>
+                        <Text style={styles.itemTitle}>ธุรกรรม</Text>
+
+
+                    </View>
+
+                </TouchableOpacity>
             </View>
 
 
