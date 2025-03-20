@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import {  View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
+import Text from '../components/Text';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

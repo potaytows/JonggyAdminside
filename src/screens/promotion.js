@@ -1,7 +1,8 @@
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import {  View, SafeAreaView, StyleSheet, StatusBar, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Text from '../components/Text';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

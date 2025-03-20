@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import { View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useFocusEffect } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import StaticTable from '../components/staticTable';
+import Text from '../components/Text';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

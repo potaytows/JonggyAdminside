@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, ScrollView,TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import { View, SafeAreaView, StyleSheet, StatusBar, FlatList, ScrollView,TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
+import Text from '../components/Text';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;

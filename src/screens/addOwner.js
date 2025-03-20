@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, ToastAndroid, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
+import {  View, SafeAreaView, StyleSheet, StatusBar, ToastAndroid, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import { StackActions } from '@react-navigation/native';
 
+import Text from '../components/Text';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

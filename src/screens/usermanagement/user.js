@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import {  View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, ToastAndroid, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { useFocusEffect } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import Text from '../components/Text';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;

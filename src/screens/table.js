@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Dragable from '../components/dragable';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Text from '../components/Text';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;

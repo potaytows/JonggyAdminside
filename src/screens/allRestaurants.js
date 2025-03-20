@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import {  View, SafeAreaView, StyleSheet, StatusBar, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import Text from '../components/Text';
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
 

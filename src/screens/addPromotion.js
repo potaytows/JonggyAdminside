@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Platform } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import {Picker} from '@react-native-picker/picker';
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
+import Text from '../components/Text';
 
 const AddPromotion = ({ navigation }) => {
     const [name, setName] = useState('');
