@@ -8,7 +8,7 @@ import axios from 'axios';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import Text from '../components/Text';
+import Text from '../../components/Text';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;

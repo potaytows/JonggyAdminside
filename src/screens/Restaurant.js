@@ -56,7 +56,7 @@ const Restaurant = ({ navigation, route }) => {
             )
         }
     };
-    const OwnerComp = ({}) => {
+    const OwnerComp = ({ }) => {
         if (screenState == "noOwner") {
             return (
                 <View>
@@ -104,7 +104,7 @@ const Restaurant = ({ navigation, route }) => {
             ToastAndroid.showWithGravityAndOffset('Added ' + newowner + " as " + Restaurant.restaurantName + "'s owner", ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } catch (error) {
             console.log(error);
-            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, '+error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, ' + error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } finally {
             setLoading(false);
         }
@@ -132,7 +132,7 @@ const Restaurant = ({ navigation, route }) => {
             ToastAndroid.showWithGravityAndOffset('Deleted ', ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } catch (error) {
             console.log(error);
-            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, '+error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
+            ToastAndroid.showWithGravityAndOffset('Some error has occured, please try again, ' + error, ToastAndroid.LONG, ToastAndroid.BOTTOM, 25, 50)
         } finally {
             setLoading(false);
             navigation.navigate("allRestaurants")
@@ -143,19 +143,19 @@ const Restaurant = ({ navigation, route }) => {
     });
     useEffect(() => {
         getRestaurants();
-        
+
     }, []);
     useFocusEffect(
         React.useCallback(() => {
             setNewOwner(route.params?.newOwner);
         }, [route.params])
-        
+
     );
     useFocusEffect(
         React.useCallback(() => {
             getTables();
         }, [])
-        
+
     );
 
     return (
@@ -166,11 +166,12 @@ const Restaurant = ({ navigation, route }) => {
             <ScrollView>
                 {imageuri &&
                     <View style={styles.Logo}>
-                        <AutoHeightImage
-                            width={400}
+                        <Image
+                            style={{ width: 400, height: 300, borderRadius: 5 }}
                             source={{ uri: imageuri }}
-                            borderRadius={5}
                         />
+
+
                     </View>
                 }
                 <View style={styles.textHeader}>
@@ -205,7 +206,7 @@ const Restaurant = ({ navigation, route }) => {
                 </View>
             </ScrollView>
             <View style={styles.addButtonCont}>
-                
+
             </View>
         </SafeAreaView>
     )
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     }, addButtonCont: {
         flex: 1,
         justifyContent: 'flex-end',
-        zIndex:2000
+        zIndex: 2000
     }, DisabledaddButton: {
         backgroundColor: 'gray',
         width: 120,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-    
+
     }
 
 

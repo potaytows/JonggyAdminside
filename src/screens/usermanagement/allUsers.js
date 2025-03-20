@@ -6,7 +6,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
-import Text from '../components/Text';
+import Text from '../../components/Text';
 
 
 const apiheader = process.env.EXPO_PUBLIC_apiURI;
