@@ -1,5 +1,5 @@
 
-# Jongy Admin-Side
+# Jonggy Admin-Side
 This is an admin-side application for Jonggy
 
 
@@ -8,9 +8,9 @@ This is an admin-side application for Jonggy
 - [@Potaytows(Chi)](https://github.com/potaytows)
 
 ## Related Repositories
-- [JongyApi](https://github.com/potaytows/JongyApi)
-- [JongyOwnerSide](https://github.com/potaytows/JongyOwnerSide)
-- [JongyClientSide](https://github.com/potaytows/jongyClientside)
+- [JonggyApi](https://github.com/potaytows/JongyApi)
+- [JonggyClientSide](https://github.com/potaytows/jonggyClientside)
+- [JonggyOwnerSide](https://github.com/potaytows/JonggyOwnerSide)
 
 ## Installation
 
